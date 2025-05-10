@@ -1,3 +1,26 @@
+# User-specific files
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Dd]ist/
+[Dd]ebug-*/
+
+# User-specific and IDE files
+.vs/
+.vscode/
 .idea/
-*/[Bb]in/
-*/[Oo]bj/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows Installer directories
+obj/
+bin/
