@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using PokerTrainerAPI.DTOs;
 using PokerTrainerAPI.Services;
 
 namespace PokerTrainerAPI.Controllers;
@@ -20,7 +21,7 @@ public class PokerController : Controller
         _cache = cache;
     }
     
-    [HttpGet]
+    [HttpGet("hand")]
     public IActionResult GetPokerHand()
     {
         var id = Guid.NewGuid();
@@ -31,9 +32,19 @@ public class PokerController : Controller
         return Ok(new { Id = id, Hand = hand });
     }
 
-    [HttpPost]
-    public IActionResult PostPokerAction()
+    [HttpPost("action")]
+    public IActionResult PostPokerAction([FromBody] ActionRequest request)
     {
-        return Ok(new { result = "Action processed" });
+        if (request.Id == Guid.Empty)
+        {
+            return BadRequest("A correlation ID is required.");
+        }
+
+        if (!_cache.TryGetValue(request.Id, out var hand))
+        {
+            return BadRequest("This hand has expired or does not exist.");
+        }
+        
+        return Ok(new { result = "Action processed." });
     }
 }
