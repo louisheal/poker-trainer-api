@@ -1,6 +1,11 @@
-using PokerTrainerAPI.Models;
+using PokerTrainerAPI.Helpers;
+using PokerTrainerAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddMemoryCache();
+builder.Services.AddSingleton<Random>();
+builder.Services.AddScoped<IPokerService, PokerService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

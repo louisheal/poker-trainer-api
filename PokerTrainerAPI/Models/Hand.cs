@@ -1,3 +1,3 @@
 namespace PokerTrainerAPI.Models;
 
-public record Hand(Card CardOne, Card CardTwo);
+public record Hand(Card FirstCard, Card SecondCard);

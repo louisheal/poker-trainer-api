@@ -4,7 +4,22 @@ public record Card(Suit Suit, Value Value)
 {
     public override string ToString()
     {
-        return Value.ToString() + " of " + Suit.ToString();
+        return Value + " of " + Suit;
+    }
+
+    public virtual bool Equals(Card? other)
+    {
+        if (other is null)
+        {
+            return false;
+        }
+        
+        return Suit == other.Suit && Value == other.Value;
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
     }
 }
 
