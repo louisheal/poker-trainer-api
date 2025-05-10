@@ -1,3 +1,4 @@
+using PokerTrainerAPI.Enums;
 using PokerTrainerAPI.Models;
 using PokerTrainerAPI.Services;
 
@@ -28,10 +29,10 @@ public class PokerService : IPokerService
     private Card GenerateRandomCard()
     {
         var suits = Enum.GetValues(typeof(Suit));
-        var values = Enum.GetValues(typeof(Value));
+        var values = Enum.GetValues(typeof(CardValue));
 
         var suit = (Suit)suits.GetValue(_random.Next(suits.Length))!;
-        var value = (Value)values.GetValue(_random.Next(values.Length))!;
+        var value = (CardValue)values.GetValue(_random.Next(values.Length))!;
 
         return new Card(suit, value);
     }

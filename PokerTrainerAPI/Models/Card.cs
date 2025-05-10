@@ -1,6 +1,8 @@
+using PokerTrainerAPI.Enums;
+
 namespace PokerTrainerAPI.Models;
 
-public record Card(Suit Suit, Value Value)
+public record Card(Suit Suit, CardValue Value)
 {
     public override string ToString()
     {
@@ -21,29 +23,4 @@ public record Card(Suit Suit, Value Value)
     {
         return base.GetHashCode();
     }
-}
-
-public enum Value
-{
-    Ace,
-    King,
-    Queen,
-    Jack,
-    Ten,
-    Nine,
-    Eight,
-    Seven,
-    Six,
-    Five,
-    Four,
-    Three,
-    Two,
-}
-
-public enum Suit
-{
-    Clubs,
-    Diamonds,
-    Hearts,
-    Spades,
 }
