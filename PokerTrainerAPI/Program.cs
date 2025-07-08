@@ -36,8 +36,8 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy.WithOrigins(
-                    "https://poker-trainer.netlify.app/",
-                    "https://poker.louisheal.com/")
+                    "https://poker-trainer.netlify.app",
+                    "https://poker.louisheal.com")
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
