@@ -10,34 +10,43 @@ namespace PokerTrainerAPI.Controllers;
 [ApiController]
 public class PokerController : Controller
 {
-    private readonly IPokerService _service;
+    private class CachedHand
+    {
+        public Hand Hand { get; set; }
+        public int RangeId { get; set; }
+    }
+    
     private readonly IMemoryCache _cache;
-    private readonly IRangeService _range;
+    private readonly List<RangeService> _ranges;
     
     public PokerController(
-        IPokerService service,
         IMemoryCache cache,
-        IRangeService range
+        List<RangeService> ranges
     )
     {
-        _service = service;
         _cache = cache;
-        _range = range;
+        _ranges = ranges;
+    }
+
+    [HttpGet("ranges")]
+    public IActionResult GetRanges()
+    {
+        return Ok(new { data = _ranges.Select((range, id) => new { label = range.ToString(), rangeId = id })});
     }
 
     [HttpGet("board")]
-    public IActionResult GetBoard()
+    public IActionResult GetBoard([FromQuery] int rangeId)
     {
-        return Ok(new { data = _range.GetBoard() });
+        return Ok(new { data = _ranges[rangeId].GetBoard() });
     }
     
     [HttpGet("hand")]
-    public IActionResult GetPokerHand()
+    public IActionResult GetPokerHand([FromQuery] int rangeId)
     {
         var id = Guid.NewGuid();
-        var hand = _service.GenerateRandomHand();
+        var hand = _ranges[rangeId].GenerateRandomHand();
         
-        _cache.Set(id, hand);
+        _cache.Set(id, new CachedHand { Hand = hand, RangeId = rangeId });
         
         return Ok(new { Id = id, Hand = hand });
     }
@@ -50,19 +59,22 @@ public class PokerController : Controller
             return BadRequest("A correlation ID is required.");
         }
 
-        if (!_cache.TryGetValue(request.Id, out var obj))
+        if (!_cache.TryGetValue(request.Id, out CachedHand? cachedHand))
         {
             return BadRequest("This hand has expired or does not exist.");
         }
         
         _cache.Remove(request.Id);
 
-        var hand = obj as Hand;
-        if (hand == null)
+        if (cachedHand == null)
         {
-            return BadRequest("Cached item is not a valid Hand.");
+            throw new InvalidOperationException("Retrieved a null object from the cache.");
         }
 
-        return Ok(new { correct = _range.IsCorrect(hand, request.Action) });
+        var hand = cachedHand.Hand;
+        var rangeId = cachedHand.RangeId;
+
+        return Ok(new { correct = _ranges[rangeId].IsCorrect(hand, request.Action) });
     }
 }
+

@@ -1,17 +1,22 @@
 using System.ComponentModel;
 using PokerTrainerAPI.DTOs;
 using PokerTrainerAPI.Enums;
+using PokerTrainerAPI.Helpers;
 using PokerTrainerAPI.Models;
 
 namespace PokerTrainerAPI.Services;
 
-public class RangeService : IRangeService
+public class RangeService
 {
     private readonly Dictionary<string, HandAction> _range;
     private readonly Dictionary<string, Tuple<int,int>> _tracker;
     private readonly List<string> _keys;
+
+    private readonly string _label;
+
+    private readonly ProbableDictionary _dist;
     
-    public RangeService(string filePath)
+    public RangeService(string filePath, string label)
     {
         if (!File.Exists(filePath))
         {
@@ -29,17 +34,27 @@ public class RangeService : IRangeService
         _keys = new List<string>();
         _range = new Dictionary<string, HandAction>();
         _tracker = new Dictionary<string, Tuple<int, int>>();
+        _dist = new ProbableDictionary();
+        _label = label;
         
         foreach (var kvp in rawDict)
         {
             _keys.Add(kvp.Key);
             _range[kvp.Key] = Enum.Parse<HandAction>(kvp.Value, ignoreCase: true);
             _tracker[kvp.Key] = new Tuple<int, int>(0, 0);
+            _dist.Add(kvp.Key, 1);
         }
+    }
+
+    public Hand GenerateRandomHand()
+    {
+        var notation = _dist.GetRandom();
+        return Hand.FromNotation(notation);
     }
 
     public bool IsCorrect(Hand hand, HandAction action)
     {
+        var key = hand.ToNotation();
         if (!_range.TryGetValue(hand.ToNotation(), out var expected))
         {
             throw new InvalidEnumArgumentException($"Range does not contain the hand {hand}");
@@ -50,8 +65,8 @@ public class RangeService : IRangeService
 
         _tracker[hand.ToNotation()] = new Tuple<int, int>(newCorrect, newTotal);
         
-        Console.WriteLine(newCorrect);
-        Console.WriteLine(newTotal);
+        var weight = (newTotal - newCorrect + 0.1) / newTotal;
+        _dist.Update(key,  weight);
         
         return action == expected;
     }
@@ -73,5 +88,10 @@ public class RangeService : IRangeService
         }
 
         return result;
+    }
+
+    public override string ToString()
+    {
+        return _label;
     }
 }
