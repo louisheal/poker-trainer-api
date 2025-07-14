@@ -76,5 +76,11 @@ public class PokerController : Controller
 
         return Ok(new { correct = _ranges[rangeId].IsCorrect(hand, request.Action) });
     }
-}
 
+    [HttpPost("reset")]
+    public IActionResult ResetBoard([FromQuery] int rangeId)
+    {
+        _ranges[rangeId].Reset();
+        return Ok();
+    }
+}

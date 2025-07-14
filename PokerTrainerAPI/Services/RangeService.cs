@@ -8,13 +8,13 @@ namespace PokerTrainerAPI.Services;
 
 public class RangeService
 {
-    private readonly Dictionary<string, HandAction> _range;
-    private readonly Dictionary<string, Tuple<int,int>> _tracker;
-    private readonly List<string> _keys;
+    private Dictionary<string, HandAction> _range;
+    private Dictionary<string, Tuple<int,int>> _tracker;
+    private ProbableDictionary _dist;
+    private List<string> _keys;
 
     private readonly string _label;
-
-    private readonly ProbableDictionary _dist;
+    private readonly Dictionary<string, string> _rawDict;
     
     public RangeService(string filePath, string label)
     {
@@ -31,19 +31,9 @@ public class RangeService
             throw new InvalidOperationException("Failed to deserialize the range file.");
         }
 
-        _keys = new List<string>();
-        _range = new Dictionary<string, HandAction>();
-        _tracker = new Dictionary<string, Tuple<int, int>>();
-        _dist = new ProbableDictionary();
         _label = label;
-        
-        foreach (var kvp in rawDict)
-        {
-            _keys.Add(kvp.Key);
-            _range[kvp.Key] = Enum.Parse<HandAction>(kvp.Value, ignoreCase: true);
-            _tracker[kvp.Key] = new Tuple<int, int>(0, 0);
-            _dist.Add(kvp.Key, 1);
-        }
+        _rawDict = rawDict;
+        Initialise();
     }
 
     public Hand GenerateRandomHand()
@@ -90,8 +80,29 @@ public class RangeService
         return result;
     }
 
+    public void Reset()
+    {
+        Initialise();
+    }
+
     public override string ToString()
     {
         return _label;
+    }
+    
+    private void Initialise()
+    {
+        _keys = new List<string>();
+        _range = new Dictionary<string, HandAction>();
+        _tracker = new Dictionary<string, Tuple<int, int>>();
+        _dist = new ProbableDictionary();
+        
+        foreach (var kvp in _rawDict)
+        {
+            _keys.Add(kvp.Key);
+            _range[kvp.Key] = Enum.Parse<HandAction>(kvp.Value, ignoreCase: true);
+            _tracker[kvp.Key] = new Tuple<int, int>(0, 0);
+            _dist.Add(kvp.Key, 1);
+        }
     }
 }
