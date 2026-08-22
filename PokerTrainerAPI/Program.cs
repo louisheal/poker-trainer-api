@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+using PokerTrainerApi.DrawRanges;
 using PokerTrainerAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,34 +25,44 @@ builder.Services.AddSingleton<List<RangeService>>(provider =>
     }).ToList();
 });
 
+builder.Services.AddSingleton<IRangeRepository, RangeRepository>(provider =>
+{
+    var env = provider.GetRequiredService<IWebHostEnvironment>();
+    var basePath = Path.Combine(env.ContentRootPath, "Ranges");
+
+    var files = new Dictionary<PokerPosition, string>()
+    {
+        { PokerPosition.LJ, Path.Combine(basePath, "lowjack.json") },
+        { PokerPosition.HJ, Path.Combine(basePath, "hijack.json") },
+        { PokerPosition.CO, Path.Combine(basePath, "cutoff.json") },
+        { PokerPosition.BTN, Path.Combine(basePath, "button.json") },
+        { PokerPosition.SB, Path.Combine(basePath, "smallblind.json") },
+    };
+
+    return new RangeRepository(files);
+});
+
 builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<Random>();
+builder.Services.AddSingleton<IDrawRangesService, DrawRangesService>();
 
-builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowFrontend",
-        policy =>
-        {
-            policy
-                .WithOrigins("https://poker.louisheal.com")
-                .AllowAnyHeader()
-                .AllowAnyMethod();
-        });
-});
+builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+app.MapOpenApi();
+app.UseSwaggerUI(options =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    options.SwaggerEndpoint("/openapi/v1.json", "v1");
+});
 
-app.UseCors("AllowFrontend");
 app.UseHttpsRedirection();
 app.MapControllers();
 

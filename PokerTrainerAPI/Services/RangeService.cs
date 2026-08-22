@@ -8,24 +8,24 @@ namespace PokerTrainerAPI.Services;
 
 public class RangeService
 {
-    private Dictionary<string, HandAction> _range;
-    private Dictionary<string, Tuple<int,int>> _tracker;
-    private ProbableDictionary _dist;
-    private List<string> _keys;
+    private Dictionary<string, HandAction> _range = null!;
+    private Dictionary<string, Tuple<int, int>> _tracker = null!;
+    private ProbableDictionary _dist = null!;
+    private List<string> _keys = null!;
 
     private readonly string _label;
     private readonly Dictionary<string, string> _rawDict;
-    
+
     public RangeService(string filePath, string label)
     {
         if (!File.Exists(filePath))
         {
             throw new FileNotFoundException(filePath);
         }
-        
+
         var json = File.ReadAllText(filePath);
         var rawDict = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(json);
-        
+
         if (rawDict == null)
         {
             throw new InvalidOperationException("Failed to deserialize the range file.");
@@ -54,10 +54,10 @@ public class RangeService
         var newTotal = _tracker[hand.ToNotation()].Item2 + 1;
 
         _tracker[hand.ToNotation()] = new Tuple<int, int>(newCorrect, newTotal);
-        
+
         var weight = (newTotal - newCorrect + 0.1) / newTotal;
-        _dist.Update(key,  weight);
-        
+        _dist.Update(key, weight);
+
         return action == expected;
     }
 
@@ -89,14 +89,14 @@ public class RangeService
     {
         return _label;
     }
-    
+
     private void Initialise()
     {
         _keys = new List<string>();
         _range = new Dictionary<string, HandAction>();
         _tracker = new Dictionary<string, Tuple<int, int>>();
         _dist = new ProbableDictionary();
-        
+
         foreach (var kvp in _rawDict)
         {
             _keys.Add(kvp.Key);

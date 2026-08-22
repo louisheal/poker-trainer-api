@@ -10,15 +10,11 @@ namespace PokerTrainerAPI.Controllers;
 [ApiController]
 public class PokerController : Controller
 {
-    private class CachedHand
-    {
-        public Hand Hand { get; set; }
-        public int RangeId { get; set; }
-    }
-    
+    private record CachedHand(Hand Hand, int RangeId);
+
     private readonly IMemoryCache _cache;
     private readonly List<RangeService> _ranges;
-    
+
     public PokerController(
         IMemoryCache cache,
         List<RangeService> ranges
@@ -31,7 +27,7 @@ public class PokerController : Controller
     [HttpGet("ranges")]
     public IActionResult GetRanges()
     {
-        return Ok(new { data = _ranges.Select((range, id) => new { label = range.ToString(), rangeId = id })});
+        return Ok(new { data = _ranges.Select((range, id) => new { label = range.ToString(), rangeId = id }) });
     }
 
     [HttpGet("board")]
@@ -39,15 +35,15 @@ public class PokerController : Controller
     {
         return Ok(new { data = _ranges[rangeId].GetBoard() });
     }
-    
+
     [HttpGet("hand")]
     public IActionResult GetPokerHand([FromQuery] int rangeId)
     {
         var id = Guid.NewGuid();
         var hand = _ranges[rangeId].GenerateRandomHand();
-        
-        _cache.Set(id, new CachedHand { Hand = hand, RangeId = rangeId });
-        
+
+        _cache.Set(id, new CachedHand(hand, rangeId));
+
         return Ok(new { Id = id, Hand = hand });
     }
 
@@ -63,7 +59,7 @@ public class PokerController : Controller
         {
             return BadRequest("This hand has expired or does not exist.");
         }
-        
+
         _cache.Remove(request.Id);
 
         if (cachedHand == null)

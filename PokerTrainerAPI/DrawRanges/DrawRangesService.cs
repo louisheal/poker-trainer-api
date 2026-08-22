@@ -18,8 +18,10 @@ public class DrawRangesService : IDrawRangesService
 
     public RangeSpot GetRangeSpot()
     {
-        var positions = Enum.GetValues<PokerPosition>();
-        var position = positions[_random.Next(positions.Length)];
+        var positions = Enum.GetValues<PokerPosition>()
+            .Where(p => p != PokerPosition.BB)
+            .ToList();
+        var position = positions[_random.Next(positions.Count)];
 
         var sequence = GenerateRfiSequence(position);
         var range = _ranges.GetRange(position);
