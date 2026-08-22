@@ -57,10 +57,11 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-app.MapOpenApi();
+app.MapOpenApi("/api/openapi/{documentName}.json");
 app.UseSwaggerUI(options =>
 {
-    options.SwaggerEndpoint("/openapi/v1.json", "v1");
+    options.RoutePrefix = "api/swagger";
+    options.SwaggerEndpoint("/api/openapi/v1.json", "v1");
 });
 
 app.UseHttpsRedirection();
