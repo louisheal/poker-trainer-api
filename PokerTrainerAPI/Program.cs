@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.OpenApi;
 using PokerTrainerApi.DrawRanges;
 using PokerTrainerAPI.Services;
@@ -68,16 +67,8 @@ builder.Services.AddOpenApi(options =>
     });
 });
 
-builder.Services.Configure<ForwardedHeadersOptions>(options =>
-{
-    options.ForwardedHeaders =
-        ForwardedHeaders.XForwardedFor |
-        ForwardedHeaders.XForwardedProto;
-});
-
 var app = builder.Build();
 
-app.UseForwardedHeaders();
 app.MapOpenApi("/api/openapi/{documentName}.json");
 app.UseSwaggerUI(options =>
 {
