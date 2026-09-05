@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using PokerTrainerApi.DrawRanges;
 
-namespace PokerTrainerApi.DrawRanges;
+namespace PokerTrainerAPI.DrawRanges.Repository;
 
 public class PokerDbContext : DbContext
 {

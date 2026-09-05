@@ -1,25 +1,20 @@
 using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using PokerTrainerApi.DrawRanges;
+using PokerTrainerAPI.DrawRanges.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<IRangeRepository, RangeRepository>(provider =>
-{
-    var env = provider.GetRequiredService<IWebHostEnvironment>();
-    var basePath = Path.Combine(env.ContentRootPath, "Ranges");
+builder.Services.AddDbContext<PokerDbContext>(options =>
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("PokerDb"),
+        ServerVersion.AutoDetect(
+            builder.Configuration.GetConnectionString("PokerDb")
+        )
+    ));
 
-    var files = new Dictionary<PokerPosition, string>()
-    {
-        { PokerPosition.LJ, Path.Combine(basePath, "lowjack.json") },
-        { PokerPosition.HJ, Path.Combine(basePath, "hijack.json") },
-        { PokerPosition.CO, Path.Combine(basePath, "cutoff.json") },
-        { PokerPosition.BTN, Path.Combine(basePath, "button.json") },
-        { PokerPosition.SB, Path.Combine(basePath, "smallblind.json") },
-    };
-
-    return new RangeRepository(files);
-});
+builder.Services.AddSingleton<IRangeRepository, RangeRepository>();
 
 builder.Services.AddSingleton<IDrawRangesService, DrawRangesService>();
 
