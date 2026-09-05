@@ -1,10 +1,10 @@
-using PokerTrainerAPI.DrawRanges.Repository;
+using PokerTrainerApi.DrawRanges.Repository;
 
 namespace PokerTrainerApi.DrawRanges;
 
 public interface IDrawRangesService
 {
-    RangeSpot GetRangeSpot();
+    Task<RangeSpot> GetRangeSpot();
 }
 
 public class DrawRangesService : IDrawRangesService
@@ -18,7 +18,7 @@ public class DrawRangesService : IDrawRangesService
         _random = new Random();
     }
 
-    public RangeSpot GetRangeSpot()
+    public async Task<RangeSpot> GetRangeSpot()
     {
         var positions = Enum.GetValues<PokerPosition>()
             .Where(p => p != PokerPosition.BB)
@@ -26,7 +26,7 @@ public class DrawRangesService : IDrawRangesService
         var position = positions[_random.Next(positions.Count)];
 
         var sequence = GenerateRfiSequence(position);
-        var range = _ranges.GetRange(position);
+        var range = await _ranges.GetRange("");
 
         return new RangeSpot(sequence, range);
     }

@@ -1,29 +1,63 @@
-using PokerTrainerApi.DrawRanges;
+using Microsoft.EntityFrameworkCore;
 
-namespace PokerTrainerAPI.DrawRanges.Repository;
+namespace PokerTrainerApi.DrawRanges.Repository;
 
 public interface IRangeRepository
 {
-    PokerRange GetRange(string spotKey);
-    void SetRange(string spotKey, PokerRange range);
+    Task<PokerRange> GetRange(string spotKey);
+    Task SetRange(string spotKey, PokerRange range);
 }
 
 public class RangeRepository : IRangeRepository
 {
     private readonly PokerDbContext _db;
 
-    public RangeRepository(Dictionary<PokerPosition, string> files, PokerDbContext db)
+    public RangeRepository(PokerDbContext db)
     {
         _db = db;
     }
 
-    public PokerRange GetRange(string spotKey)
+    public async Task<PokerRange> GetRange(string spotKey)
     {
-        throw new NotImplementedException();
+        var range = await _db.PokerRanges
+            .Include(x => x.Entries)
+            .SingleAsync(x => x.SpotKey == spotKey);
+
+        return new PokerRange(
+            range.Entries.ToDictionary(
+                x => x.HandKey,
+                x => x.Action
+            )
+        );
     }
 
-    public void SetRange(string spotKey, PokerRange range)
+    public async Task SetRange(string spotKey, PokerRange range)
     {
-        throw new NotImplementedException();
+        var dbRange = await _db.PokerRanges
+        .Include(x => x.Entries)
+        .SingleOrDefaultAsync(x => x.SpotKey == spotKey);
+
+        if (dbRange == null)
+        {
+            dbRange = new PokerRangeDao
+            {
+                SpotKey = spotKey
+            };
+
+            _db.PokerRanges.Add(dbRange);
+        }
+
+        dbRange.Entries.Clear();
+
+        foreach (var (handKey, action) in range)
+        {
+            dbRange.Entries.Add(new PokerRangeEntryDao
+            {
+                HandKey = handKey,
+                Action = action
+            });
+        }
+
+        await _db.SaveChangesAsync();
     }
 }
