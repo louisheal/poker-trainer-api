@@ -1,5 +1,7 @@
 using System.Text.Json.Serialization;
 
+namespace PokerTrainerApi.DrawRanges;
+
 public enum PokerHandKey
 {
     [JsonStringEnumMemberName("AA")]
