@@ -7,7 +7,7 @@ on:
     tags:
       - "*.*.*"
     workflow_dispatch:
-  
+
 jobs:
   build:
     uses: louisheal/github-actions/.github/workflows/build-and-push.yml@main
