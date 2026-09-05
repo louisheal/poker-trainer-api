@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using PokerTrainerApi.DrawRanges;
 
-namespace PokerTrainerAPI.DrawRanges.Repository;
+namespace PokerTrainerApi.DrawRanges.Repository;
 
 public class PokerDbContext : DbContext
 {
@@ -9,6 +8,12 @@ public class PokerDbContext : DbContext
     {
     }
 
-    public DbSet<PokerRange> PokerRanges => Set<PokerRange>();
-    public DbSet<PokerRangeEntry> RangeEntries => Set<PokerRangeEntry>();
+    public DbSet<PokerRangeDao> PokerRanges => Set<PokerRangeDao>();
+    public DbSet<PokerRangeEntryDao> RangeEntries => Set<PokerRangeEntryDao>();
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<PokerRangeEntryDao>()
+            .HasKey(x => new { x.RangeId, x.HandKey });
+    }
 }

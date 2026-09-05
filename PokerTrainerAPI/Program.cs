@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using PokerTrainerApi.DrawRanges;
-using PokerTrainerAPI.DrawRanges.Repository;
+using PokerTrainerApi.DrawRanges.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,9 +14,8 @@ builder.Services.AddDbContext<PokerDbContext>(options =>
         )
     ));
 
-builder.Services.AddSingleton<IRangeRepository, RangeRepository>();
-
-builder.Services.AddSingleton<IDrawRangesService, DrawRangesService>();
+builder.Services.AddScoped<IRangeRepository, RangeRepository>();
+builder.Services.AddScoped<IDrawRangesService, DrawRangesService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers()
