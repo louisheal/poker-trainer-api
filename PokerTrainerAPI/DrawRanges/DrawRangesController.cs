@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using PokerTrainerApi.DrawRanges.Repository;
 
 namespace PokerTrainerApi.DrawRanges;
 
@@ -6,13 +7,20 @@ namespace PokerTrainerApi.DrawRanges;
 [ApiController]
 public class DrawRangesController : ControllerBase
 {
-    private IDrawRangesService _ranges;
+    private IRangeRepository _repository;
 
-    public DrawRangesController(IDrawRangesService ranges)
+    public DrawRangesController(IRangeRepository repository)
     {
-        _ranges = ranges;
+        _repository = repository;
     }
 
     [HttpGet("rangeSpot")]
-    public IActionResult GetRangeSpot() => Ok(_ranges.GetRangeSpot());
+    public async Task<IActionResult> GetRangeSpot(string spotKey) => Ok(await _repository.GetRange(spotKey));
+
+    [HttpPost("range")]
+    public async Task<IActionResult> PostRange(string spotKey, [FromBody] PokerRange range)
+    {
+        await _repository.UpdateRange(spotKey, range);
+        return Ok();
+    }
 }
