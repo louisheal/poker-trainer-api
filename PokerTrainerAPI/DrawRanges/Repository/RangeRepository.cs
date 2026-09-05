@@ -5,7 +5,7 @@ namespace PokerTrainerApi.DrawRanges.Repository;
 public interface IRangeRepository
 {
     Task<PokerRange> GetRange(string spotKey);
-    Task UpdateRange(string spotKey, PokerRange range);
+    Task<PokerRange> UpdateRange(string spotKey, PokerRange range);
 }
 
 public class RangeRepository : IRangeRepository
@@ -31,7 +31,7 @@ public class RangeRepository : IRangeRepository
         );
     }
 
-    public async Task UpdateRange(string spotKey, PokerRange range)
+    public async Task<PokerRange> UpdateRange(string spotKey, PokerRange range)
     {
         var dbRange = await _db.PokerRanges
             .Include(x => x.Entries)
@@ -59,5 +59,6 @@ public class RangeRepository : IRangeRepository
         }
 
         await _db.SaveChangesAsync();
+        return await GetRange(spotKey);
     }
 }
