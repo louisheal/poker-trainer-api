@@ -8,7 +8,7 @@ using PokerTrainerApi.DrawRanges.Repository;
 
 #nullable disable
 
-namespace PokerTrainerAPI.Migrations
+namespace PokerTrainerApi.Migrations
 {
     [DbContext(typeof(PokerDbContext))]
     [Migration("20260905162127_InitialCreate")]

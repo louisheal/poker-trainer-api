@@ -7,7 +7,7 @@ using PokerTrainerApi.DrawRanges.Repository;
 
 #nullable disable
 
-namespace PokerTrainerAPI.Migrations
+namespace PokerTrainerApi.Migrations
 {
     [DbContext(typeof(PokerDbContext))]
     partial class PokerDbContextModelSnapshot : ModelSnapshot
