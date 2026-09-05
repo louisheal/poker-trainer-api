@@ -1,5 +1,5 @@
-using PokerTrainerAPI.Enums;
+using PokerTrainerApi.Enums;
 
-namespace PokerTrainerAPI.DTOs;
+namespace PokerTrainerApi.DTOs;
 
 public record ActionRequest(Guid Id, HandAction Action);

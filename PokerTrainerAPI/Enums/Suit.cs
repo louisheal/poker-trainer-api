@@ -1,4 +1,4 @@
-namespace PokerTrainerAPI.Enums;
+namespace PokerTrainerApi.Enums;
 
 public enum Suit
 {

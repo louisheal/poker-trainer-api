@@ -1,3 +1,5 @@
+using PokerTrainerApi.DrawRanges.Models;
+
 namespace PokerTrainerApi.DrawRanges.Repository;
 
 public class PokerRangeEntryDao

@@ -1,4 +1,5 @@
 using PokerTrainerApi.DrawRanges.Repository;
+using PokerTrainerApi.DrawRanges.Models;
 
 namespace PokerTrainerApi.DrawRanges;
 

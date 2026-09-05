@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using PokerTrainerAPI.DTOs;
-using PokerTrainerAPI.Models;
-using PokerTrainerAPI.Services;
+using PokerTrainerApi.DTOs;
+using PokerTrainerApi.Models;
+using PokerTrainerApi.Services;
 
-namespace PokerTrainerAPI.Controllers;
+namespace PokerTrainerApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

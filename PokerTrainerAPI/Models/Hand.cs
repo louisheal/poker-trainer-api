@@ -1,7 +1,7 @@
 using System.Text;
-using PokerTrainerAPI.Enums;
+using PokerTrainerApi.Enums;
 
-namespace PokerTrainerAPI.Models;
+namespace PokerTrainerApi.Models;
 
 public record Hand(Card FirstCard, Card SecondCard)
 {

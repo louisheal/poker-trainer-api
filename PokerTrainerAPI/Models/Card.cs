@@ -1,6 +1,6 @@
-using PokerTrainerAPI.Enums;
+using PokerTrainerApi.Enums;
 
-namespace PokerTrainerAPI.Models;
+namespace PokerTrainerApi.Models;
 
 public record Card(Suit Suit, CardValue Value)
 {
@@ -24,7 +24,7 @@ public record Card(Suit Suit, CardValue Value)
             _ => throw new ArgumentOutOfRangeException(nameof(Value), $"Unsupported card value: {Value}")
         };
     }
-    
+
     public override string ToString()
     {
         return Value + " of " + Suit;
@@ -36,7 +36,7 @@ public record Card(Suit Suit, CardValue Value)
         {
             return false;
         }
-        
+
         return Suit == other.Suit && Value == other.Value;
     }
 

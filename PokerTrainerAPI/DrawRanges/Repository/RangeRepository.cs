@@ -34,8 +34,8 @@ public class RangeRepository : IRangeRepository
     public async Task SetRange(string spotKey, PokerRange range)
     {
         var dbRange = await _db.PokerRanges
-        .Include(x => x.Entries)
-        .SingleOrDefaultAsync(x => x.SpotKey == spotKey);
+            .Include(x => x.Entries)
+            .SingleOrDefaultAsync(x => x.SpotKey == spotKey);
 
         if (dbRange == null)
         {

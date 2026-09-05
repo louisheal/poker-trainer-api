@@ -1,4 +1,4 @@
-namespace PokerTrainerAPI.Helpers;
+namespace PokerTrainerApi.Helpers;
 
 public class ProbableDictionary
 {
@@ -8,7 +8,7 @@ public class ProbableDictionary
     public void Add(string key, double weight)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(weight);
-        
+
         _weights.Add(key, weight);
         _totalWeight += weight;
     }
@@ -37,7 +37,7 @@ public class ProbableDictionary
                 return key;
             }
         }
-        
+
         Console.WriteLine($"{r} - {_totalWeight}");
 
         return _weights.Last().Key;

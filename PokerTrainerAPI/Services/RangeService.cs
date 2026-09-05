@@ -1,10 +1,10 @@
 using System.ComponentModel;
-using PokerTrainerAPI.DTOs;
-using PokerTrainerAPI.Enums;
-using PokerTrainerAPI.Helpers;
-using PokerTrainerAPI.Models;
+using PokerTrainerApi.DTOs;
+using PokerTrainerApi.Enums;
+using PokerTrainerApi.Helpers;
+using PokerTrainerApi.Models;
 
-namespace PokerTrainerAPI.Services;
+namespace PokerTrainerApi.Services;
 
 public class RangeService
 {

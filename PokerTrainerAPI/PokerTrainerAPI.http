@@ -1,6 +1,6 @@
-@PokerTrainerAPI_HostAddress = http://localhost:5272
+@PokerTrainerApi_HostAddress = http://localhost:5272
 
-GET {{PokerTrainerAPI_HostAddress}}/weatherforecast/
+GET {{PokerTrainerApi_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
