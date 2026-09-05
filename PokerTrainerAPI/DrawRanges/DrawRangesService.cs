@@ -1,3 +1,5 @@
+using PokerTrainerAPI.DrawRanges.Repository;
+
 namespace PokerTrainerApi.DrawRanges;
 
 public interface IDrawRangesService
