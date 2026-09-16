@@ -22,7 +22,7 @@ Global
 		{34C48A56-E595-4525-837A-99050A7F5C11}.Release|Any CPU.Build.0 = Release|Any CPU
 		{34C48A56-E595-4525-837A-99050A7F5C11}.Release|x64.ActiveCfg = Release|Any CPU
 		{34C48A56-E595-4525-837A-99050A7F5C11}.Release|x64.Build.0 = Release|Any CPU
-		{34C48A56-E595-4525-837A-99050A7F5C11}.Release|x86.ActiveCfg = Release|Any CPU
+				{34C48A56-E595-4525-837A-99050A7F5C11}.Release|x86.ActiveCfg = Release|Any CPU
 		{34C48A56-E595-4525-837A-99050A7F5C11}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
