@@ -15,7 +15,11 @@ public class DrawRangesController : ControllerBase
     }
 
     [HttpGet("range")]
-    public async Task<IActionResult> GetRange(string spotKey) => Ok(await _repository.GetRange(spotKey));
+    public async Task<IActionResult> GetRange(string spotKey)
+    {
+        var range = await _repository.GetRange(spotKey);
+        return range == null ? NotFound() : Ok(range);
+    }
 
     [HttpPost("range")]
     public async Task<IActionResult> UpdateRange(string spotKey, [FromBody] PokerRange range) => Ok(await _repository.UpdateRange(spotKey, range));

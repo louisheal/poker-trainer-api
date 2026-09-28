@@ -17,6 +17,14 @@ public class PokerDbContext : DbContext
             .HasKey(x => new { x.RangeId, x.HandKey });
 
         modelBuilder.Entity<PokerRangeDao>()
+            .Property(x => x.SpotKey)
+            .HasMaxLength(255);
+
+        modelBuilder.Entity<PokerRangeDao>()
+            .HasIndex(x => x.SpotKey)
+            .IsUnique();
+
+        modelBuilder.Entity<PokerRangeDao>()
             .HasMany(x => x.Entries)
             .WithOne()
             .HasForeignKey(x => x.RangeId);
