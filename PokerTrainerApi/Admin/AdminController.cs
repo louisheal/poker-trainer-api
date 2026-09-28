@@ -69,23 +69,6 @@ public class AdminController(
     [HttpGet("auth/session")]
     public IActionResult GetSession() => NoContent();
 
-    [AllowAnonymous]
-    [HttpPost("auth/logout")]
-    public IActionResult Logout()
-    {
-        Response.Cookies.Delete(
-            AdminAuthDefaults.CookieName,
-            new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.Strict,
-                Path = "/api/admin"
-            });
-
-        return NoContent();
-    }
-
     [HttpGet("ranges/range")]
     public async Task<IActionResult> GetRange(string spotKey)
     {
