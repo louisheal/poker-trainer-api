@@ -64,6 +64,11 @@ public class RangeRepository : IRangeRepository
         }
 
         await _db.SaveChangesAsync();
-        return await GetRange(spotKey);
+        return new PokerRange(
+            dbRange.Entries.ToDictionary(
+                entry => entry.HandKey,
+                entry => entry.Action
+            )
+        );
     }
 }
