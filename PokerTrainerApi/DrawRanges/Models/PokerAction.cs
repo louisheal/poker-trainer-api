@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace PokerTrainerApi.DrawRanges;
+namespace PokerTrainerApi.DrawRanges.Models;
 
 public enum PokerAction
 {
