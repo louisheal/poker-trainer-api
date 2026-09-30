@@ -7,5 +7,7 @@ public enum PokerAction
     [JsonStringEnumMemberName("fold")]
     Fold,
     [JsonStringEnumMemberName("raise")]
-    Raise
+    Raise,
+    [JsonStringEnumMemberName("call")]
+    Call
 }
